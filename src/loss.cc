@@ -10,6 +10,8 @@
 #include "utils.h"
 
 #include <cmath>
+#include <iostream>
+#include <fstream>
 
 namespace fasttext {
 
@@ -305,6 +307,10 @@ SoftmaxLoss::SoftmaxLoss(std::shared_ptr<Matrix>& wo) : Loss(wo) {}
 void SoftmaxLoss::computeOutput(Model::State& state) const {
   Vector& output = state.output;
   output.mul(*wo_, state.hidden);
+  std::ofstream file;
+  file.open ("logits.txt");
+  file << output;
+  file.close();
   real max = output[0], z = 0.0;
   int32_t osz = output.size();
   for (int32_t i = 0; i < osz; i++) {
