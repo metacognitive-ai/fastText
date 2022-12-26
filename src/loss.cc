@@ -119,6 +119,10 @@ real BinaryLogisticLoss::binaryLogistic(
 void BinaryLogisticLoss::computeOutput(Model::State& state) const {
   Vector& output = state.output;
   output.mul(*wo_, state.hidden);
+  std::ofstream file;
+  file.open ("logits.txt");
+  file << output;
+  file.close();
   int32_t osz = output.size();
   for (int32_t i = 0; i < osz; i++) {
     output[i] = sigmoid(output[i]);
@@ -332,7 +336,6 @@ real SoftmaxLoss::forward(
     real lr,
     bool backprop) {
   computeOutput(state);
-
   assert(targetIndex >= 0);
   assert(targetIndex < targets.size());
   int32_t target = targets[targetIndex];
